@@ -1,0 +1,95 @@
+name: CMake Windows Build (Latest MSVC)
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Configure CMake (Release)
+      run: cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build with CMake (Release)
+      run: cmake --build build --config Release
+
+    - name: Get current date and time
+      id: datetime
+      run: echo "release_name=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Get previous release tag
+      id: prev_tag
+      run: |
+        git fetch --prune --unshallow --tags # Get older commits and ensure we have all tags
+        last_tag=$(git tag --list '20*' --sort=-creatordate | head -n 1)
+        if [ -z "$last_tag" ]; then
+          first_commit=$(git rev-list --max-parents=0 HEAD)
+          echo "previous_tag=$first_commit" >> $GITHUB_ENV
+          echo "No previous tag found. Using first commit: $first_commit"
+        else
+          echo "previous_tag=$last_tag" >> $GITHUB_ENV
+          echo "Previous tag found: $last_tag"
+        fi
+      shell: bash
+
+    - name: Get commit log
+      id: commit_log
+      run: |
+        echo "Fetching commit log from ${{ env.previous_tag }} to HEAD..."
+        
+        # Debugging: Print previous tag and all commits for verification
+        echo "=== Debug: Previous Tag ==="
+        echo "previous_tag=${{ env.previous_tag }}"
+        echo "=== Debug: Git Log Overview ==="
+        git log --oneline --graph --decorate --all
+
+        commit_log=$(git log --pretty=format:"- %h %s" ${{ env.previous_tag }}..HEAD)
+
+        if [ -z "$commit_log" ]; then
+          commit_log="No new commits since last release."
+        fi
+
+        echo "commit_log<<EOF" >> $GITHUB_ENV
+        echo "$commit_log" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+        
+        echo "=== Debug: Generated Commit Log ==="
+        echo "$commit_log"
+      shell: bash
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: "${{ env.release_name }}"
+        name: "Release ${{ env.release_name }}"
+        body: |
+          ## 🚀 Automated Release from GitHub Actions 🚀
+
+          **Release Date:** ${{ env.release_name }}
+
+          ### 📄 Included Files 📄:
+          - **FranticMatch.hpp**: FranticMatch Header-Only Library.
+
+          ### 🔄 Changes Since Last Release 🔄:
+          Release From: ${{ env.previous_tag }}
+
+          ${{ env.commit_log }}
+        draft: false
+        prerelease: true
+        files: |
+          FranticMatch/FranticMatch.hpp
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
