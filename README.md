@@ -3,6 +3,8 @@ A Simple, Header-Only, Single-File, C++23 Match-X Puzzle Game Library.
 
 This repo also includes a test game that runs on a terminal, which you can build using CMake.
 
+![Test Game](https://i.ibb.co/ycvW07cS/image.png)
+
 # Todo
 - Add Scores to the Test Game
 - Add Match Merging
