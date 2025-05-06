@@ -91,5 +91,6 @@ jobs:
         prerelease: true
         files: |
           FranticMatch/FranticMatch.hpp
+          build/bin/Release/FranticMatch_TestGame.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
