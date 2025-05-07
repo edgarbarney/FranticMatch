@@ -682,6 +682,13 @@ namespace FranticMatch
 		{
 			Swap(row1, col1, row2, col2);
 			auto matches = FindMatchGroups(minMatchLength, matchDirections);
+
+			if (matches.empty())
+			{
+				// No matches, undo the swap
+				Swap(row1, col1, row2, col2);
+			}
+
 			return matches;
 		}
 
