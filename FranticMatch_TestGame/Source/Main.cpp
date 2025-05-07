@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 
 	FranticMisketGame::Game mainGame(rowCount, columnCount);
 
-	bool running = true;
+	bool running = mainGame.MainMenu();
 
 	while (running)
 	{

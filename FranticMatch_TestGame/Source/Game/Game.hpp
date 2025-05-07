@@ -100,6 +100,12 @@ namespace FranticMisketGame
 		Game(FranticMatch::Scalar rowCount, FranticMatch::Scalar columnCount);
 
 		/// <summary>
+		/// Show the main menu for the game.
+		/// </summary>
+		/// <returns>True if the game should continue running.</returns>
+		bool MainMenu();
+
+		/// <summary>
 		/// Event loop for the game.
 		/// </summary>
 		/// <returns>True if the game should continue running.</returns>

@@ -25,6 +25,29 @@ FranticMisketGame::Game::Game(FranticMatch::Scalar rowCount, FranticMatch::Scala
 	matchTable.Randomise(true);
 }
 
+bool FranticMisketGame::Game::MainMenu()
+{
+	std::wcout	<< CN_CLR_BLUE << L"Welcome to "
+				<< CN_CLR_PURPLE << L"Frantic "
+				<< CN_CLR_RED << L"M"
+				<< CN_CLR_YELLOW << L"i"
+				<< CN_CLR_GREEN << L"s"
+				<< CN_CLR_CYAN << L"k"
+				<< CN_CLR_BLUE << L"e"
+				<< CN_CLR_PURPLE << L"t"
+				<< CN_CLR_RESET << L"!\n\n";
+
+
+
+	std::wcout << L"This is a test game for the " << CN_CLR_GREEN << L"FranticMatch" << CN_CLR_RESET << L" engine.\n";
+	std::wcout << L"Made by " << CN_CLR_CYAN << L"FranticDreamer" << CN_CLR_RESET << ".\n\n";
+	std::wcout << L"Press any key to start the game...\n";
+
+	std::wcin.ignore();
+
+	return true;
+}
+
 bool FranticMisketGame::Game::Update()
 {
 	// Clear the console first
