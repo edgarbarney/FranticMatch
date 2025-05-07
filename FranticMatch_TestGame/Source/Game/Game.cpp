@@ -44,6 +44,10 @@ bool FranticMisketGame::Game::Update()
 
 	std::wcout << TABLE_SPACING;
 
+	std::wcout << L"Score: " << GetPlayerScore();
+
+	std::wcout << TABLE_SPACING;
+
 	if (ProcessInput() == InputAction::Quit)
 	{
 #ifdef _WIN32
@@ -403,6 +407,15 @@ FranticMisketGame::Game::InputAction FranticMisketGame::Game::SwapMiskets(bool s
 		// Keep popping matches until there are no more matches
 		while (!matches.empty())
 		{
+			// Calculate the score
+			for (const auto& match : matches)
+			{
+				for (const auto& misket : match)
+				{
+					AddMatchScore(1);
+				}
+			}
+
 			matchTable.PopMisketMatchGroups(matches);
 			matches = matchTable.FindMatchGroups();
 		}

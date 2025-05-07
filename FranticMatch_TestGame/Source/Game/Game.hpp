@@ -82,6 +82,11 @@ namespace FranticMisketGame
 		/// This is used to keep track of the score;
 		int64_t playerScore = 0;
 
+		/// <summary>
+		/// Score multiplier per Misket.
+		/// </summary>
+		static constexpr int64_t SCORE_MULTIPLIER = 15;
+
 	public:
 		Game() = default;
 		~Game() = default;
@@ -130,6 +135,15 @@ namespace FranticMisketGame
 		/// <param name="pos">The position to check.</param>
 		/// <returns>True if the position is valid, false otherwise.</returns>
 		bool IsValidMisketPosition(const FranticMatch::MisketPosition& pos) const;
+
+		/// <summary>
+		/// Get the current score of the player.
+		/// </summary>
+		/// <returns>The current score of the player.</returns>
+		int64_t GetPlayerScore() const
+		{
+			return playerScore;
+		}
 
 	private:
 		/// <summary>
@@ -183,5 +197,13 @@ namespace FranticMisketGame
 		/// </summary>
 		/// <param name="selectSwap">True if the first one was selected beforehand.</param>
 		InputAction SwapMiskets(bool selectSwap);
+
+		/// <summary>
+		/// Add Score per Misket.
+		/// </summary>
+		void AddMatchScore(unsigned int misketCount)
+		{
+			playerScore += misketCount * SCORE_MULTIPLIER;
+		}
 	};
 }
